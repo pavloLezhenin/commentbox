@@ -2,7 +2,7 @@ defmodule CommentboxWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", CommentboxWeb.RoomChannel
+  channel "room:*", CommentboxWeb.RoomChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
