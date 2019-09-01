@@ -1,6 +1,14 @@
 import React from "react";
+import ReactTimeAgo from 'react-time-ago'
+import JavascriptTimeAgo from 'javascript-time-ago'
+
+import en from 'javascript-time-ago/locale/en'
 
 class ServerMessage extends React.Component {
+    constructor(props) {
+        super(props)
+        JavascriptTimeAgo.locale(en)
+    }
 
     render() {
         return (
@@ -12,6 +20,8 @@ class ServerMessage extends React.Component {
                                 <strong>{this.props.username}</strong>
                                 <br/>
                                 {this.props.message}
+                                <br/>
+                                <ReactTimeAgo date={new Date(this.props.date)}/>
                             </p>
                         </div>
                     </div>
