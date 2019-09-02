@@ -9,11 +9,11 @@ class Comments extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            inputMessage: "",
-            messages: []
+            inputMessage: ""
         }
         this.connectToChannel = this.connectToChannel.bind(this)
         this.logout = this.logout.bind(this)
+        this.messagesComponent = React.createRef()
     }
 
     connectToChannel(){
@@ -22,9 +22,7 @@ class Comments extends React.Component {
             .receive("ok", response => { console.log("Joined successfully", response) })
 
         this.channel.on("comment", payload => {
-            this.setState({
-                messages: [{message: payload.body, username: payload.username, date: payload.date}].concat(this.state.messages)
-            })
+            this.messagesComponent.current.loadCommentsFromServer()
         })
     }
 
@@ -50,10 +48,12 @@ class Comments extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.channel.push("comment", {body: this.state.inputMessage,
+        this.channel.push("comment", {message: this.state.inputMessage,
             username: this.props.username,
             date: new Date()})
-        this.state.inputMessage = ""
+        this.setState({
+            inputMessage: ""
+        })
     }
 
     logout() {
@@ -62,16 +62,6 @@ class Comments extends React.Component {
     }
 
     render() {
-        const messages = this.state.messages.map((message, index) => {
-            return (
-                <ServerMessage
-                    key = { index }
-                    username = { message.username }
-                    message = { message.message }
-                    date = { message.date }
-                />
-            )
-        });
 
         return (
             <div>
@@ -111,19 +101,7 @@ class Comments extends React.Component {
                         Submit
                     </button>
                 </form>
-                <div
-                    className="flex-container"
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flexStart",
-                        justifyContent: "flexStart",
-                        margin: "auto",
-                        width: "100%"
-                    }}
-                >
-                    {messages}
-                </div>
+                <ServerMessage ref={this.messagesComponent} perPage={10} />
             </div>
         )
     }

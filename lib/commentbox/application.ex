@@ -11,9 +11,14 @@ defmodule Commentbox.Application do
       # Start the Ecto repository
       Commentbox.Repo,
       # Start the endpoint when the application starts
-      CommentboxWeb.Endpoint
+      CommentboxWeb.Endpoint,
       # Starts a worker by calling: Commentbox.Worker.start_link(arg)
       # {Commentbox.Worker, arg},
+      {ConCache, [
+        name: :comments_cache,
+        ttl_check_interval: :timer.hours(24),
+        global_ttl: :timer.hours(24)
+      ]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

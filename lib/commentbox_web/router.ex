@@ -18,6 +18,7 @@ defmodule CommentboxWeb.Router do
     get "/", PageController, :index
     post "/login", LoginController, :login
     post "/validateToken", LoginController, :validateToken
+    get "/comments", RoomController, :getComments
   end
 
   # Other scopes may use custom stacks.
